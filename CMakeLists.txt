@@ -4,7 +4,7 @@ project(ak45_ros2)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# CAN 계층은 이 패키지 밖(../ak45_can)에 있다. 소스 복사본을 두지 않고 원본을 직접
+# CAN 계층은 별도 저장소(team-jax/ak45_can)다. 소스 복사본을 두지 않고 원본을 직접
 # 컴파일한다 — 예전처럼 src/ 에 사본을 두면 한쪽만 고쳐져 조용히 갈라진다.
 # 경로를 바꿀 수 있게 캐시 변수로 뺀다.
 set(AK45_CAN_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../ak45_can"
@@ -14,9 +14,10 @@ get_filename_component(AK45_CAN_DIR "${AK45_CAN_DIR}" ABSOLUTE)
 if(NOT EXISTS "${AK45_CAN_DIR}/src/ak45_36_socketcan_control.cpp")
   message(FATAL_ERROR
     "ak45_can 을 찾을 수 없다: ${AK45_CAN_DIR}\n"
-    "ros2_ws/src 에는 ak45_ros2 가 아니라 저장소 루트를 심링크해야 한다:\n"
-    "  ln -sfn ~/바탕화면/Can ~/ros2_ws/src/Can\n"
-    "또는 -DAK45_CAN_DIR=<경로> 로 직접 지정한다.")
+    "CAN 계층은 별도 저장소다. 이 패키지와 형제로 클론해야 한다:\n"
+    "  cd ${CMAKE_CURRENT_SOURCE_DIR}/.. && git clone https://github.com/team-jax/ak45_can.git\n"
+    "다른 곳에 두었으면 경로를 직접 준다:\n"
+    "  colcon build --packages-select ak45_ros2 --cmake-args -DAK45_CAN_DIR=<경로>")
 endif()
 
 find_package(ament_cmake REQUIRED)

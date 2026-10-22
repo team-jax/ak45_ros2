@@ -4,7 +4,7 @@
 # src
 
 ## Purpose
-**이 디렉터리에는 노드 구현 파일 하나만 있다.** 2026-10-15 CAN 계층 분리 전에는 제어 라이브러리 `.cpp` 사본이 함께 있었지만, 지금은 `../../ak45_can/src/` 의 원본을 `CMakeLists.txt` 가 직접 컴파일한다.
+**이 디렉터리에는 노드 구현 파일 하나만 있다.** 2026-10-15 CAN 계층 분리(별도 저장소 team-jax/ak45_can) 전에는 제어 라이브러리 `.cpp` 사본이 함께 있었지만, 지금은 `../../ak45_can/src/` 의 원본을 `CMakeLists.txt` 가 직접 컴파일한다.
 
 ## Key Files
 
@@ -26,13 +26,13 @@
 대신 **한 번의 수정이 CLI 와 ROS 노드 양쪽에 동시에 영향을 준다** — 둘 다 빌드해 확인한다:
 
 ```bash
-cd ~/바탕화면/Can/ak45_can && make clean && make
+cd ../ak45_can && make clean && make      # 형제 저장소
 cd ~/ros2_ws && colcon build --packages-select ak45_ros2
 ```
 
-라이브러리 `.cpp` 는 `-Wpedantic` 없이 컴파일된다. `ak45_can/Makefile` 이 `-Wall -Wextra`만 쓰므로 그 이상은 통과가 보증되지 않기 때문이다. 경고가 뜨면 **라이브러리를 고치지 말고** `../../docs/ros2.md` 부록 E에 기록한 뒤 경고 옵션을 낮춘다.
+라이브러리 `.cpp` 는 `-Wpedantic` 없이 컴파일된다. `ak45_can/Makefile` 이 `-Wall -Wextra`만 쓰므로 그 이상은 통과가 보증되지 않기 때문이다. 경고가 뜨면 **라이브러리를 고치지 말고** `../docs/ros2.md` 부록 E에 기록한 뒤 경고 옵션을 낮춘다.
 
-### 노드 파일 구조 (`../../docs/ros2.md` 부록 A가 정본)
+### 노드 파일 구조 (`../docs/ros2.md` 부록 A가 정본)
 생성자는 **이 순서를 바꾸면 안 된다**:
 
 1. `rclcpp::Node("ak45_state_publisher")`

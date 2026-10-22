@@ -10,10 +10,20 @@ CubeMars AK45-36 6개를 다루는 ROS2 Humble 노드 **하나**(`ak45_node`).
 > 노드를 **둘로 나누지 마라.** 라이브러리가 `flock(/tmp/ak45_ctrl.lock)`으로 프로세스당 1개만
 > `ak45_init()`에 성공시킨다. 나중에 뜬 쪽은 반드시 죽는다.
 
-## 1. CAN 라이브러리는 `../ak45_can` 의 원본을 직접 쓴다
+## 1. CAN 라이브러리는 형제 저장소 `../ak45_can` 의 원본을 직접 쓴다
 
-이 패키지에는 **라이브러리 사본이 없다.** `CMakeLists.txt` 가 저장소의 CAN 계층
-`../ak45_can` 에 있는 원본을 그대로 컴파일한다.
+이 패키지에는 **라이브러리 사본이 없다.** `CMakeLists.txt` 가 별도 저장소
+[`team-jax/ak45_can`](https://github.com/team-jax/ak45_can) 의 원본을 그대로 컴파일한다.
+
+**두 저장소를 `~/ros2_ws/src/` 아래 형제로 클론한다** — `AK45_CAN_DIR` 기본값이
+`../ak45_can` 이라 그래야 설정 없이 맞는다:
+
+```bash
+cd ~/ros2_ws/src
+git clone https://github.com/team-jax/ak45_can.git
+git clone https://github.com/team-jax/ak45_ros2.git
+cd ~/ros2_ws && colcon build --packages-select ak45_ros2
+```
 
 | 항목 | 값 |
 |---|---|
@@ -32,10 +42,10 @@ CubeMars AK45-36 6개를 다루는 ROS2 Humble 노드 **하나**(`ak45_node`).
 > cd ~/ros2_ws && colcon build --packages-select ak45_ros2
 > ```
 >
-> ⚠️ `~/ros2_ws/src/Can` 은 **저장소 루트**를 가리키는 심링크여야 한다.
-> `ak45_ros2` 만 가리키면 `../ak45_can` 이 워크스페이스 밖을 가리켜 CMake 가 FATAL 로 멈춘다:
+> ⚠️ `ak45_can` 을 다른 곳에 두었으면 경로를 직접 준다. 못 찾으면 CMake 가
+> FATAL 로 멈추면서 필요한 명령을 알려준다:
 > ```bash
-> ln -sfn ~/바탕화면/Can ~/ros2_ws/src/Can
+> colcon build --packages-select ak45_ros2 --cmake-args -DAK45_CAN_DIR=<ak45_can 경로>
 > ```
 
 ## 2. CAN 인터페이스는 `can0` 고정

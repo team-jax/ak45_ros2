@@ -5,9 +5,9 @@
 ## Purpose
 CubeMars AK45-36 모터 6대(CAN ID 0x01~0x06)의 SocketCAN 피드백을 폴링해 `/joint_states`(50Hz)와 `/diagnostics`(2Hz)로 발행하는 **ROS2 Humble 단일 노드 패키지**. 프로젝트 Phase 1에 해당하며 **읽기 전용이다 — 모터 이동 명령을 보내지 않는다**(종료 시 라이브러리 내부에서 나가는 Current Brake 0A 프레임 6개는 예외).
 
-**사양서는 같은 저장소의 `../docs/ros2.md`** (v3.0)다. 이름·값·QoS·로그 문구·검증 항목 V0~V15가 전부 확정값으로 적혀 있고, **구현은 그 문서를 그대로 따르는 것이 계약이다.** 프로젝트 전체 상태는 `../docs/STATUS.md`를 본다.
+**사양서는 이 저장소의 [`docs/ros2.md`](docs/ros2.md)** (v3.0)다. 이름·값·QoS·로그 문구·검증 항목 V0~V15가 전부 확정값으로 적혀 있고, **구현은 그 문서를 그대로 따르는 것이 계약이다.** 프로젝트 전체 상태는 **[`team-jax/ak45_can`](https://github.com/team-jax/ak45_can) 의 `docs/STATUS.md`** 를 본다.
 
-**CAN 라이브러리는 이 패키지에 없다.** `../ak45_can` 의 원본을 `CMakeLists.txt` 가 직접 컴파일한다
+**CAN 라이브러리는 이 저장소에 없다.** 별도 저장소 [`team-jax/ak45_can`](https://github.com/team-jax/ak45_can) 의 원본을 `CMakeLists.txt` 가 직접 컴파일한다 — **형제로 클론해야 한다**(`../ak45_can`)
 (2026-10-15 분리. 그 전에는 `src/`·`include/` 에 사본이 있었다). 라이브러리를 고칠 일은 `ak45_can/` 에서 한다.
 
 > **이 패키지는 아직 어느 Git 저장소에도 속하지 않는다** (`STATUS.md` P11). `~/ros2_ws/src/` 아래에만 있어 버전 관리되지 않으므로, 파일을 고치면 되돌릴 수 없다. 커밋 위치 결정(`team-jax/Can`에 디렉토리 추가 vs 별도 저장소)이 선행 과제다.
@@ -20,7 +20,7 @@ CubeMars AK45-36 모터 6대(CAN ID 0x01~0x06)의 SocketCAN 피드백을 폴링�
 |------|-------------|
 | `package.xml` | ament_cmake 패키지 매니페스트. 의존은 `rclcpp`/`sensor_msgs`/`diagnostic_msgs` 3개 + 실행시점 `launch`/`launch_ros`. **`<license>TODO</license>`** — 저장소에 LICENSE가 없어 팀이 정해야 채울 수 있다(`STATUS.md` P12). `ament_lint_auto`는 **의도적으로 넣지 않았다**(서식 린터가 수정 금지 원본 파일과 충돌) |
 | `CMakeLists.txt` | C++17, 실행 파일 `ak45_node`. **경고 옵션이 파일별로 다르다** — `-Wall -Wextra`는 전체, `-Wpedantic`은 `set_source_files_properties`로 우리 노드 파일에만. 원본 Makefile이 보증하지 않는 옵션을 수정 금지 파일에 걸지 않기 위한 것이다(`ros2.md` §2.4) |
-| `README.md` | 사용자용 문서. CAN 라이브러리를 `../ak45_can` 에서 직접 쓰는 방식과 `~/ros2_ws/src/Can` 심링크 요건을 설명한다 |
+| `README.md` | 사용자용 문서. CAN 라이브러리를 형제 저장소 `../ak45_can` 에서 직접 쓰는 방식과 클론 배치를 설명한다 |
 
 ## Subdirectories
 
